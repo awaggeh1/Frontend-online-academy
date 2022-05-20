@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
 import { MENU_BEHAVIOUR, MENU_PLACEMENT } from 'constants.js';
-import NavUserMenu from './NavUserMenu';
+import NavUser from './NavUser';
 import NavIconMenu from './NavIconMenu';
 import MainMenu from './main-menu/MainMenu';
 import NavLogo from './NavLogo';
@@ -60,7 +60,7 @@ const Nav = () => {
       >
         <NavLogo />
         <NavLanguageSwitcher />
-        <NavUserMenu />
+        <NavUser />
         <NavIconMenu />
         <MainMenu />
         <NavMobileButtons />

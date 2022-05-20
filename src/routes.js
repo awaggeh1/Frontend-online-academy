@@ -11,19 +11,13 @@ const courses = {
   list: lazy(() => import('views/courses/CoursesList')),
   detail: lazy(() => import('views/courses/CoursesDetail')),
 };
-const quiz = {
-  list: lazy(() => import('views/quiz/QuizList')),
-  detail: lazy(() => import('views/quiz/QuizDetail')),
-  result: lazy(() => import('views/quiz/QuizResult')),
-};
-const paths = {
-  list: lazy(() => import('views/paths/PathsList')),
-  detail: lazy(() => import('views/paths/PathsDetail')),
-};
-
 const instructor = {
   list: lazy(() => import('views/instructor/InstructorList')),
   detail: lazy(() => import('views/instructor/InstructorDetail')),
+};
+
+const user = {
+  profile: lazy(() => import('layout/nav/NavUserProfile'))
 };
 
 const appRoot = DEFAULT_PATHS.APP.endsWith('/') ? DEFAULT_PATHS.APP.slice(1, DEFAULT_PATHS.APP.length) : DEFAULT_PATHS.APP;
@@ -57,32 +51,7 @@ const routesAndMenuItems = {
       subs: [
         { path: '/explore', label: 'menu.explore', component: courses.explore },
         { path: '/list', label: 'menu.list', component: courses.list },
-        { path: '/detail', label: 'menu.detail', component: courses.detail },
-      ],
-    },
-    {
-      path: `${appRoot}/quiz`,
-      label: 'menu.quiz',
-      icon: 'quiz',
-      exact: true,
-      redirect: true,
-      to: `${appRoot}/quiz/list`,
-      subs: [
-        { path: '/list', label: 'menu.list', component: quiz.list },
-        { path: '/detail', label: 'menu.detail', component: quiz.detail },
-        { path: '/result', label: 'menu.result', component: quiz.result },
-      ],
-    },
-    {
-      path: `${appRoot}/paths`,
-      label: 'menu.paths',
-      icon: 'destination',
-      exact: true,
-      redirect: true,
-      to: `${appRoot}/paths/list`,
-      subs: [
-        { path: '/list', label: 'menu.list', component: paths.list },
-        { path: '/detail', label: 'menu.detail', component: paths.detail },
+        { path: '/detail', label: 'menu.detail', component: courses.detail }
       ],
     },
     {
@@ -96,7 +65,12 @@ const routesAndMenuItems = {
         { path: '/list', label: 'menu.list', component: instructor.list },
         { path: '/detail', label: 'menu.detail', component: instructor.detail },
       ],
-    }
+    },
+    // Ruta per accedir a la ruta del usuari
+    {
+      path: `${appRoot}/user/profile`,
+      component: user.profile
+    },
   ],
   sidebarItems: [],
 };
