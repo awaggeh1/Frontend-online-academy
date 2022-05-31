@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // import { USER_ROLE } from 'constants.js';
 import { DEFAULT_PATHS } from 'config.js';
 
+
 const dashboards = {
   elearning: lazy(() => import('views/dashboards/ElearningDashboard')),
 };
@@ -25,10 +26,12 @@ const appRoot = DEFAULT_PATHS.APP.endsWith('/') ? DEFAULT_PATHS.APP.slice(1, DEF
 const routesAndMenuItems = {
   mainMenuItems: [
     {
+      // PAGINA PRINCIPAL
       path: DEFAULT_PATHS.APP,
       exact: true,
       redirect: true,
-      to: `${appRoot}/dashboards/elearning`,
+      to: `${DEFAULT_PATHS.LOGIN}`
+      // to: `${appRoot}/dashboards/elearning`,  
     },
     {
       path: `${appRoot}/dashboards`,
@@ -51,7 +54,6 @@ const routesAndMenuItems = {
       subs: [
         { path: '/explore', label: 'menu.explore', component: courses.explore },
         { path: '/list', label: 'menu.list', component: courses.list },
-        { path: '/detail', label: 'menu.detail', component: courses.detail }
       ],
     },
     {
@@ -66,11 +68,11 @@ const routesAndMenuItems = {
         { path: '/detail', label: 'menu.detail', component: instructor.detail },
       ],
     },
-    // Ruta per accedir a la ruta del usuari
+    // Ruta per accedir als detalls del curso
     {
-      path: `${appRoot}/user/profile`,
-      component: user.profile
-    },
+      path: `${appRoot}/courses/detail/:idCourse`,
+      component: courses.detail
+    }
   ],
   sidebarItems: [],
 };

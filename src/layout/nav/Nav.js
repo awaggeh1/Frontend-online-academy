@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-
+import Logout from 'views/default/LogoutButton';
 import { MENU_BEHAVIOUR, MENU_PLACEMENT } from 'constants.js';
 import NavUser from './NavUser';
 import NavIconMenu from './NavIconMenu';
@@ -60,10 +60,11 @@ const Nav = () => {
       >
         <NavLogo />
         <NavLanguageSwitcher />
-        <NavUser />
+        <NavUser />   
         <NavIconMenu />
         <MainMenu />
         <NavMobileButtons />
+        <Logout />
       </div>
       <div className="nav-shadow" />
     </div>

@@ -31,6 +31,10 @@ import { Slide, ToastContainer } from 'react-toastify';
 // mock server register for demo
 import '@mock-api';
 
+// import login provider
+import { Auth0Provider } from '@auth0/auth0-react';
+
+
 const Main = () => {
   const layoutlessRoutes = useMemo(() => getLayoutlessRoutes({ data: routesAndMenuItems }), []);
   return (
@@ -48,7 +52,16 @@ const Main = () => {
   );
 };
 
-ReactDOM.render(<Main />, document.getElementById('root'));
+ReactDOM.render(
+  <Auth0Provider 
+    domain='dev-tpwc--pg.us.auth0.com' 
+    clientId='vUjslqsqP3fKGZvHqxap93oHH6dNhxQ5'
+    redirectUri={window.location.origin}
+    >
+    <Main />
+  </Auth0Provider>,
+  document.getElementById('root')
+);
 
 /*
  * If you want to start measuring performance in your app, pass a function
