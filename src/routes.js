@@ -68,11 +68,14 @@ const routesAndMenuItems = {
         { path: '/detail', label: 'menu.detail', component: instructor.detail },
       ],
     },
-    // Ruta per accedir als detalls del curso
     {
       path: `${appRoot}/courses/detail/:idCourse`,
       component: courses.detail
-    }
+    },
+    {
+      path: `${appRoot}/instructor/detail/:idInstructor`,
+      component: courses.detail
+    },
   ],
   sidebarItems: [],
 };

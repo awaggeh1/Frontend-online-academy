@@ -5,19 +5,15 @@ import HtmlHead from 'components/html-head/HtmlHead';
 import { Col, Row } from 'react-bootstrap';
 import CourseExploreCard from './components/CourseExploreCard';
 
-
 const CoursesExplore = () => {
 
-
   const [courses, setCourses] = useState([]);
-
 
   // Retorna la quantitat de cursos 
   const GetCourses = async () => {
     const data = await fetch(`${API.ADDR}/courses`) // Obte les dades
     const courseData = await data.json(); // els transforma en json
     setCourses(courseData)
-    console.log(courses)
   }
 
   useEffect(() => {
@@ -46,15 +42,14 @@ const CoursesExplore = () => {
 
       {/* Llista tots els cursos */}
       <Row className="row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mb-5">
-        
         {courses.map(c => (
-                    <CourseExploreCard
-                      key={c.key}
-                      title={c.title}
-                      toCourse= {`/courses/detail/${c.idcourse}`}
-                    />
-                  )
-                )}
+          <CourseExploreCard
+            key={c.key}
+            title={c.title}
+            toCourse= {`/courses/detail/${c.idcourse}`}
+          />
+          )
+        )}
       </Row>
     </>
   );
