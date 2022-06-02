@@ -15,7 +15,7 @@ const InstructorCard = (props) => {
               <div className="sw-13 position-relative mb-3 mx-auto">
                 <img src="/img/profile/profile-1.webp" className="img-fluid rounded-xl" alt="thumb" />
               </div>
-              <NavLink to="/instructor/detail" className="mb-3 body-link">
+              <NavLink to={toCourse} className="mb-3 body-link">
                 {name}
               </NavLink>
               <div className="text-muted text-medium mb-2">{speciality}</div>
@@ -62,7 +62,7 @@ const InstructorCard = (props) => {
                 </Col> 
               </Row>
               <Row className="ps-3">
-                <NavLink to="/instructor/detail" className="btn btn-outline-primary w-100 me-1 btn-sm">
+                <NavLink to={toCourse} className="btn btn-outline-primary w-100 me-1 btn-sm">
                 + Sobre {name}
                 </NavLink>  
             </Row> 

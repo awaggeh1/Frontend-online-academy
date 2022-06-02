@@ -65,7 +65,7 @@ const routesAndMenuItems = {
       to: `${appRoot}/instructor/list`,
       subs: [
         { path: '/list', label: 'menu.list', component: instructor.list },
-        { path: '/detail', label: 'menu.detail', component: instructor.detail },
+        // { path: '/detail', label: 'menu.detail', component: instructor.detail },
       ],
     },
     {
@@ -74,7 +74,7 @@ const routesAndMenuItems = {
     },
     {
       path: `${appRoot}/instructor/detail/:idInstructor`,
-      component: courses.detail
+      component: instructor.detail
     },
   ],
   sidebarItems: [],

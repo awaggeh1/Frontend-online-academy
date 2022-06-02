@@ -62,8 +62,7 @@ const InstructorList = (props) => {
           rating='5' 
           aboutMe={i.about_me}
           coursesNum={instructorCourses} 
-          toCourse='/instructor/detail/2'
-          // toCourse={`/instructor/detail/${i.idinstructor}`}
+          toCourse={`/instructor/detail/${i.idinstructor}`}
         />
           )
       )}
