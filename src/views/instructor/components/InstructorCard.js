@@ -6,14 +6,14 @@ import { NavLink } from 'react-router-dom';
 
 const InstructorCard = (props) => {
 
-    const {name, speciality, rating, aboutMe, coursesNum, toCourse} = props;
+    const {name, speciality, rating, aboutMe, coursesNum, toCourse, imgLink} = props;
 
     return (
         <Col>
           <Card className="h-100">
             <Card.Body className="text-center">
               <div className="sw-13 position-relative mb-3 mx-auto">
-                <img src="/img/profile/profile-1.webp" className="img-fluid rounded-xl" alt="thumb" />
+                <img src={imgLink} className="img-fluid rounded-xl" alt="thumb" />
               </div>
               <NavLink to={toCourse} className="mb-3 body-link">
                 {name}

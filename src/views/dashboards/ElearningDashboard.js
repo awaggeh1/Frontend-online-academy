@@ -3,18 +3,23 @@ import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import HtmlHead from 'components/html-head/HtmlHead';
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { useAuth0 } from '@auth0/auth0-react';
+
 import ContinueLearning from './components/ContinueLearning';
 import RecomendendCourse from './components/RecomendedCourse';
 import TrendingCourse from './components/TrendingCourse';
 
-const ElearningDashboard = (props) => {
+const ElearningDashboard = () => {
 
   // Declaracio dels estats
-  const [coursesNumber, setCourses] = useState(0);
   const [course, setCourse] = useState([]);
   const [recomendedCourse, setRecomendedCourse] = useState([]);
   const [trendingCourse, setTrendingCourse] = useState([]);
 
+  const { user } = useAuth0();
+  
+  // Emagatzema les dades del login
+  sessionStorage.setItem('user', JSON.stringify(user))
 
   // Retorna els cursos que el usuari ha de continuar fent
   const GetContinuelearningCourse = async () => {
@@ -22,6 +27,7 @@ const ElearningDashboard = (props) => {
     const courseData = await data.json(); // els transforma en json
     setCourse(courseData)
   }
+
   // Agafa els cursos recomenats 
   const GetRecomendedCourse = async () => {
     const data = await fetch(`${API.ADDR}/courses/3`) // Obte les dades
@@ -36,13 +42,6 @@ const ElearningDashboard = (props) => {
     setTrendingCourse(courseData)
   }
 
-  // Retorna la quantitat de cursos 
-  const GetCourses = async () => {
-    const data = await fetch(`${API.ADDR}/courses`) // Obte les dades
-    const courseData = await data.json(); // els transforma en json
-    setCourses(courseData.length)
-  }
-
   useEffect(() => {
     GetContinuelearningCourse()
     GetRecomendedCourse()
@@ -53,6 +52,11 @@ const ElearningDashboard = (props) => {
   const title = 'E-learning Dashboard';
   const description = 'Elearning Portal E-learning Dashboard Page';
   const breadcrumbs = [{ to: '', text: 'Inicio' }];
+
+  if (!course) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <HtmlHead title={title} description={description} />

@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useWindowSize } from 'hooks/useWindowSize';
-import { Row, Col, Button, Form, Card, Modal } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import Rating from 'react-rating';
-import HtmlHead from 'components/html-head/HtmlHead';
+import API from 'api-config';
 import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
+import HtmlHead from 'components/html-head/HtmlHead';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
+import { useWindowSize } from 'hooks/useWindowSize';
+import { useAuth0 } from "@auth0/auth0-react";
+import React, { useEffect, useState } from 'react';
+import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import CourseCard from './components/CourseCard';
 
 const ElearningDashboard = () => {
+
+  const studentID = 4;
   const title = 'Lista de Cursos';
   const description = 'Elearning Portal Course List Page';
-
   const breadcrumbs = [
     { to: '', text: 'Home' },
     { to: 'courses/explore', text: 'Courses' },
@@ -23,9 +24,20 @@ const ElearningDashboard = () => {
   const { width } = useWindowSize();
   const [isLgScreen, setIsLgScreen] = useState(false);
   const [isOpenFiltersModal, setIsOpenFiltersModal] = useState(false);
+  const [courses, setCourses] = useState([]);
+
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  // Retorna la quantitat de cursos 
+  const GetCourses = async () => {
+    const data = await fetch(`${API.ADDR}/studenthascourse/${studentID}`) // Obte les dades
+    const courseData = await data.json(); // els transforma en json
+    setCourses(courseData)
+  }
 
   useEffect(() => {
-
+    GetCourses()
+    console.log(user)
     if (width) {
       if (width >= lgBreakpoint) {
         if (!isLgScreen) setIsLgScreen(true);
@@ -35,6 +47,10 @@ const ElearningDashboard = () => {
     return () => {};
     // eslint-disable-next-line
   }, [width]);
+
+  if(isLoading){
+    return <div>Loading ...</div>
+  }
 
   return (
     <>
@@ -76,331 +92,15 @@ const ElearningDashboard = () => {
       <Row className="g-0">
         <Col>
           <Row className="g-3 row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-4 mb-5">
-            {/* Llista de cursos */}
-            
-            {/* Introduir el component */}
-            <CourseCard title="Introduccion a la Aqueedah" rating="5" price="$ 0"/>
-
-{/* 
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-2.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Better Ways to Mix Dough for the Molds
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(221)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 44.80</del>
-                    </div>
-                    <div>$ 34.20</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-3.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Apple Cake Recipe
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(338)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 38.50</del>
-                    </div>
-                    <div>$ 29.15</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-4.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Cooking Tips the Perfect Burger
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(25)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 28.90</del>
-                    </div>
-                    <div>$ 22.25</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-5.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Fruit Decorations
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(114)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 24.60</del>
-                    </div>
-                    <div>$ 18.90</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-6.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Recipes for Sweet and Healty Treats
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(84)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 33.25</del>
-                    </div>
-                    <div>$ 22.15</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-7.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Better Ways to Mix Dough for the Molds
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(117)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 28.15</del>
-                    </div>
-                    <div>$ 22.50</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-8.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Carrot Cake Gingerbread
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(53)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 16.75</del>
-                    </div>
-                    <div>$ 12.50</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-9.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Facts About Sugar Products
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(53)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 32.50</del>
-                    </div>
-                    <div>$ 24.80</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-10.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Introduction to Baking Cakes
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(67)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 27.00</del>
-                    </div>
-                    <div>$ 13.20</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-3.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Apple Cake Recipe for Starters
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(427)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 48.00</del>
-                    </div>
-                    <div>$ 28.80</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="h-100">
-                <Card.Img src="/img/product/small/product-6.webp" className="card-img-top sh-22" alt="card image" />
-                <Card.Body>
-                  <h5 className="heading mb-0">
-                    <NavLink to="/courses/detail" className="body-link stretched-link">
-                      Advanced Sandwich Making Techniques
-                    </NavLink>
-                  </h5>
-                </Card.Body>
-                <Card.Footer className="border-0 pt-0">
-                  <div className="mb-2">
-                    <Rating
-                      initialRating={5}
-                      readonly
-                      emptySymbol={<i className="cs-star text-primary" />}
-                      fullSymbol={<i className="cs-star-full text-primary" />}
-                    />
-                    <div className="text-muted d-inline-block text-small align-text-top ms-1">(84)</div>
-                  </div>
-                  <div className="card-text mb-0">
-                    <div className="text-muted text-overline text-small">
-                      <del>$ 32.25</del>
-                    </div>
-                    <div>$ 24.50</div>
-                  </div>
-                </Card.Footer>
-              </Card>
-            </Col> */}
+            {/* Llista de cursos */}      
+            {courses.map(c => (
+              <CourseCard
+                key={c.key}
+                title={c.title}
+                toCourse= {`/courses/detail/${c.idcourse}`}
+              />
+              )
+            )}
           </Row>
           <Row>
             <Col xs="12" className="text-center">

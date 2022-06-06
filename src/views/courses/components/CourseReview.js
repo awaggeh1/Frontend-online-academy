@@ -11,7 +11,7 @@ const CourseReview = (props) => {
             <Row className="g-0 w-100 border-bottom border-separator-light pb-3 mb-3">
                 <Col xs="auto">
                 <div className="sw-5 me-3">
-                    <img src="/img/profile/profile-2.webp" className="img-fluid rounded-xl" alt="thumb" />
+                    <img src={imgLink} className="img-fluid rounded-xl" alt="thumb" />
                 </div>
                 </Col>
                 <Col className="pe-3">

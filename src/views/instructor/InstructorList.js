@@ -1,16 +1,13 @@
-import React, {useEffect, useState} from 'react';
 import API from 'api-config';
-import { Row, Col, Card, Button } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import Rating from 'react-rating';
-import HtmlHead from 'components/html-head/HtmlHead';
 import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
-import CsLineIcons from 'cs-line-icons/CsLineIcons';
+import HtmlHead from 'components/html-head/HtmlHead';
+import React, { useEffect, useState } from 'react';
+import { Col, Row } from 'react-bootstrap';
+import DEFAULT_AVATAR from '../../assets/imatges/default_avatar.png';
 import InstructorCard from './components/InstructorCard';
 
 const InstructorList = (props) => {
   
-
   const [instructors, setInstructors] = useState([]);
   const [instructorCourses, setInstructorCourses] = useState(0);
 
@@ -56,13 +53,14 @@ const InstructorList = (props) => {
       <Row className="row-cols-1 row-cols-sm-2 row-cols-xl-3 row-cols-xxl-4 g-3">
       {instructors.map(i => (
           <InstructorCard 
-          key={i.key}
-          name={i.first_name}
-          speciality={i.speciality}
-          rating='5' 
-          aboutMe={i.about_me}
-          coursesNum={instructorCourses} 
-          toCourse={`/instructor/detail/${i.idinstructor}`}
+            key={i.key}
+            name={i.first_name}
+            speciality={i.speciality}
+            rating='5'
+            imgLink={DEFAULT_AVATAR}
+            aboutMe={i.about_me}
+            coursesNum={instructorCourses} 
+            toCourse={`/instructor/detail/${i.idinstructor}`}
         />
           )
       )}

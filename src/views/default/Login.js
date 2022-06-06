@@ -6,12 +6,14 @@ import LoginButton from './LoginButton';
 const Login = () => {
   const Authenticated = useAuth0().isAuthenticated;
   const history = useHistory();
-
+  const { user } = useAuth0();
+  
+  
   return (
         <>
             {/* Shows after login  */}
             {Authenticated && 
-            <> 
+            <>
               {history.push('/dashboards/elearning')}
             </>
             } 

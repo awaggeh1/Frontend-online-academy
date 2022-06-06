@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import HtmlHead from 'components/html-head/HtmlHead';
 import { Col, Row } from 'react-bootstrap';
-import CourseExploreCard from './components/CourseExploreCard';
+import CourseCard from './components/CourseCard';
 
 const CoursesExplore = () => {
 
@@ -43,7 +43,7 @@ const CoursesExplore = () => {
       {/* Llista tots els cursos */}
       <Row className="row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 mb-5">
         {courses.map(c => (
-          <CourseExploreCard
+          <CourseCard
             key={c.key}
             title={c.title}
             toCourse= {`/courses/detail/${c.idcourse}`}

@@ -1,14 +1,15 @@
-import React, {useEffect, useState}  from 'react';
-import { Row, Col, Card, Button, InputGroup, FormControl } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import Rating from 'react-rating';
-import HtmlHead from 'components/html-head/HtmlHead';
+import API from 'api-config';
+import { useAuth0 } from "@auth0/auth0-react";
 import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
-import API from 'api-config'
+import HtmlHead from 'components/html-head/HtmlHead';
 import CsLineIcons from 'cs-line-icons/CsLineIcons';
-import Clamp from 'components/clamp';
-import InstructorCourseCard from './components/InstructorCourseCard';
+import React, { useEffect, useState } from 'react';
+import Alert from 'react-bootstrap/Alert'
+import { Button, Card, Col, FormControl, InputGroup, Row } from 'react-bootstrap';
+import { NavLink, useHistory } from 'react-router-dom';
+import DEFAULT_AVATAR from '../../assets/imatges/default_avatar.png';
 import CommentsCard from './components/CommentsCard';
+import InstructorCourseCard from './components/InstructorCourseCard';
 
 const InstructorDetail = (props) => {
 
@@ -17,12 +18,34 @@ const InstructorDetail = (props) => {
   const [instructorCourses, setInstructorCourses] = useState(0);
   const [courses, setCourses] = useState([]);
   const [comments, setComments] = useState([]);
+  const [studentsNumber, setStudentsNumber] = useState(0);
+  const [loaded, setLoading] = useState(0);
+  const [commentText, setCommentText] = useState([]);
+  const [isShown, setIsShown] = useState(false);
+  
+  // Fa un post d'un nou review a la base de dades
+  async function PostComment(){
+    fetch(`${API.ADDR}/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        text: commentText,
+        date: Date.now(),
+        studentIdstudent: 1, // Encara no esta definit s'ha d'extreure del Auth0
+        instructorIdinstructor: props.match.params.idInstructor
+      })
+    })
+  }
 
   // Retorna dades del professor
   const GetInstructor = async () => {
     const data = await fetch(`${API.ADDR}/instructors/${props.match.params.idInstructor}`)
     const instructorData = await data.json();
     setInstructor(instructorData)
+    setLoading(true)
   }
 
   // Retorna el numero de cursos que te el professor
@@ -39,11 +62,17 @@ const InstructorDetail = (props) => {
     setCourses(coursesData)
   }
   
-   // Retorna els commenatris que ha rebut aques professor
-   const GetComments = async () => {
+  // Retorna els commenatris que ha rebut aques professor
+  const GetComments = async () => {
     const data = await fetch(`${API.ADDR}/comments/instructor/${props.match.params.idInstructor}`)
     const commentsData = await data.json();
     setComments(commentsData)
+  }
+
+  const GetStudentsNumber = async () => {
+    const data = await fetch(`${API.ADDR}/studenthascourse/instructor/${props.match.params.idInstructor}`)
+    const studentsNumberData = await data.json();
+    setStudentsNumber(studentsNumberData)
   }
 
   useEffect(() => {
@@ -51,15 +80,26 @@ const InstructorDetail = (props) => {
     GetInstructructorNumCourses()
     GetInstructructorCourses()
     GetComments()
+    GetStudentsNumber()
   }, [])
 
+  const onSubmit = () => {
+    PostComment()
+    setCommentText("") // Resetea el campo
+    setIsShown(true) // Mostra l'alerta
+  };
+  
   const title = 'Detalles del profesor';
   const description = 'Elearning Portal Instructor Detail Page';
-
   const breadcrumbs = [
     { to: '', text: 'Home' },
     { to: 'instructor/list', text: 'Instructors' },
   ];
+
+  // No entra mentres el hook no estigui carregat
+  if(!loaded){
+    return <div>Loading ...</div>;
+  }
 
   return (
     <>
@@ -85,7 +125,7 @@ const InstructorDetail = (props) => {
             <Card.Body className="mb-n5">
               <div className="d-flex align-items-center flex-column mb-5">
                   <div className="sw-13 position-relative mb-3">
-                    <img src="/img/profile/profile-6.webp" className="img-fluid rounded-xl" alt="thumb" />
+                    <img src={DEFAULT_AVATAR} className="img-fluid rounded-xl" alt="thumb" />
                   </div>
                   <div className="h5 mb-0">{instructor.first_name} {instructor.last_name}</div>
                   <div className="text-muted mb-2">{instructor.speciality}</div>
@@ -112,7 +152,7 @@ const InstructorDetail = (props) => {
           {/* Stats Start */}
           <h2 className="small-title">Stats</h2>
           <Row className="g-2 mb-5">
-            <Col sm="6" lg="3">
+            <Col sm="6" lg="4">
               <Card className="hover-border-primary">
                 <Card.Body>
                   <div className="heading mb-0 d-flex justify-content-between lh-1-25 mb-3">
@@ -123,26 +163,14 @@ const InstructorDetail = (props) => {
                 </Card.Body>
               </Card>
             </Col>
-            <Col sm="6" lg="3">
-              <Card className="hover-border-primary">
-                <Card.Body>
-                  <div className="heading mb-0 d-flex justify-content-between lh-1-25 mb-3">
-                    <span>Rating</span>
-                    <CsLineIcons icon="star" className="text-primary" />
-                  </div>
-                  <div className="text-small text-muted mb-1">345 Users</div>
-                  <div className="cta-1 text-primary">4.85</div>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col sm="6" lg="3">
+            <Col sm="6" lg="4">
               <Card className="hover-border-primary">
                 <Card.Body>
                   <div className="heading mb-0 d-flex justify-content-between lh-1-25 mb-3">
                     <span>Personas inscritas en todos los cursos</span>
                     <CsLineIcons icon="diploma" className="text-primary" />
                   </div>
-                  <div className="cta-1 text-primary">120</div>
+                  <div className="cta-1 text-primary">{studentsNumber}</div>
                 </Card.Body>
               </Card>
             </Col>
@@ -155,14 +183,13 @@ const InstructorDetail = (props) => {
           </div>
           <Row className="g-3 mb-5">
             {courses.map(c => (
-                      <InstructorCourseCard
-                        key={c.key}
-                        title={c.title}
-                        price='0'
-                        rating='5'
-                        toCourse= {`/courses/detail/${c.idcourse}`}
-                      />
-                    )
+              <InstructorCourseCard
+                key={c.key}
+                title={c.title}
+                price='0'
+                rating='5'
+                toCourse= {`/courses/detail/${c.idcourse}`}
+              />)
             )}
           </Row>
           {/* Courses End */}
@@ -171,7 +198,7 @@ const InstructorDetail = (props) => {
           <h2 className="small-title">Comentarios</h2>
           <Card>
             <Card.Body>
-              {/* LLista tots els comentaris */}
+              {/* Lista los comentaris */}
               {comments.map(c => (
                 <CommentsCard
                   key={c.key}
@@ -179,19 +206,40 @@ const InstructorDetail = (props) => {
                   lastName={c.student.last_name}
                   date={c.date}
                   text={c.text}
-                />
-                )
+                />)
               )}
-
-              <div className="input-group mt-5">
-                <InputGroup className="mb-3">
-                  <FormControl placeholder="Añadir comentario" />
-                  <Button variant="outline-primary" className="btn-icon btn-icon-end">
-                    <span>Enviar</span>
-                    <CsLineIcons icon="send" />
-                  </Button>
-                </InputGroup>
-              </div>
+              {/* Comment */}
+              <Row className="g-0">         
+                <div className="input-group mt-5">
+                  <InputGroup className="mb-3" type="reset"> 
+                    <FormControl 
+                      placeholder="Añadir review" 
+                      name="commentText"
+                      value={commentText}
+                      onChange={e => setCommentText(e.target.value)} 
+                    /> 
+                    <Button
+                      variant="outline-primary"
+                      type="submit"
+                      className="btn-icon btn-icon-end" 
+                      onClick={() => onSubmit()}> 
+                      <span>Enviar</span>
+                      <CsLineIcons icon="send" 
+                    />
+                    </Button>
+                  </InputGroup>
+                  {isShown && 
+                    <Alert 
+                      key='success' 
+                      variant='success' 
+                      onClose={() => setIsShown(false)} 
+                      dismissible
+                    >
+                      Comentario añadido con éxito
+                    </Alert>
+                  }
+                </div>
+            </Row>
             </Card.Body>
           </Card>
           {/* Comments End */}
