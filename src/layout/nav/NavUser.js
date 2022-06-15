@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { useAuth0 } from '@auth0/auth0-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { layoutShowingNavMenu } from 'layout/layoutSlice';
@@ -11,25 +12,21 @@ const NavUserMenu = () => {
   const { user } = useAuth0();
   const Authenticated = useAuth0().isAuthenticated;
   const { showingNavMenu } = useSelector((state) => state.layout);
+
   const dispatch = useDispatch();
 
-  const NavUser = React.memo(
-    React.forwardRef(({ onClick, expanded = false}, ref) => (
-    <a
-      href= '/#'
-      ref={ref}
-      className="d-flex user position-relative"
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onClick(e);
-      }}
-    >
-      <img className="profile" alt={user.name} src={user.picture} />
-      <div className="name">{user.name}</div>
-    </a>
-  ))
-  );
+    const NavUser = React.memo(
+      React.forwardRef(({ onClick, expanded = false}, ref) => (
+      <a
+        href= '/#'
+        ref={ref}
+        className="d-flex user position-relative"      
+      >
+        <img className="profile" alt={user.name} src={user.picture} />
+        <div className="name">{user.name}</div>
+      </a>
+    ))
+    );
 
   const onToggle = (status, event) => {
     if (event && event.stopPropagation) event.stopPropagation();
@@ -47,5 +44,7 @@ const NavUserMenu = () => {
       {!Authenticated && <></>}    
     </>      
   );
+
 };
-export default React.memo(NavUserMenu);
+// export default React.memo(NavUserMenu);
+export default NavUserMenu;

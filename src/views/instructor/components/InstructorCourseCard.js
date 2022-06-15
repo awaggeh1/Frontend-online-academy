@@ -7,14 +7,14 @@ import Clamp from 'components/clamp';
 
 const InstructorCourseCard = (props) => {
 
-    const {title, price, rating, toCourse} = props;
+    const {title, price, rating, Img, toCourse} = props;
 
     return (
         <Col md="12" lg="6" xl="12" xxl="6">
         <Card>
           <Row className="g-0 sh-19">
             <Col xs="auto" className="h-100 position-relative">
-              <img src="/img/product/small/product-3.webp" alt="alternate text" className="card-img-horizontal sh-19 h-sm-100 sw-17 sw-lg-20" />
+              <img src={Img} alt="alternate text" className="card-img-horizontal sh-19 h-sm-100 sw-17 sw-lg-20" />
             </Col>
             <Col>
               <Card.Body className="d-flex align-items-center h-100 py-3">

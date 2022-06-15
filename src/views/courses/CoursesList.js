@@ -11,7 +11,7 @@ import CourseCard from './components/CourseCard';
 
 const ElearningDashboard = () => {
 
-  const studentID = 4;
+  const studentID = 1;
   const title = 'Lista de Cursos';
   const description = 'Elearning Portal Course List Page';
   const breadcrumbs = [

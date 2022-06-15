@@ -8,10 +8,13 @@ import Alert from 'react-bootstrap/Alert'
 import { Button, Card, Col, FormControl, InputGroup, Row } from 'react-bootstrap';
 import { NavLink, useHistory } from 'react-router-dom';
 import DEFAULT_AVATAR from '../../assets/imatges/default_avatar.png';
+import DEFAULT_COURSE_AVATAR from '../../assets/imatges/img_course.png';
+
 import CommentsCard from './components/CommentsCard';
 import InstructorCourseCard from './components/InstructorCourseCard';
 
 const InstructorDetail = (props) => {
+
 
   // Declaracio dels estats
   const [instructor, setInstructor] = useState([]);
@@ -22,7 +25,10 @@ const InstructorDetail = (props) => {
   const [loaded, setLoading] = useState(0);
   const [commentText, setCommentText] = useState([]);
   const [isShown, setIsShown] = useState(false);
-  
+  const [studentId, setStudentID] = useState(0);
+  const [user, setUser] = useState([]);
+  const history = useHistory();
+
   // Fa un post d'un nou review a la base de dades
   async function PostComment(){
     fetch(`${API.ADDR}/comments`, {
@@ -38,6 +44,20 @@ const InstructorDetail = (props) => {
         instructorIdinstructor: props.match.params.idInstructor
       })
     })
+  }
+  
+  // Recupera les dades d'inici de sessió del usuari 
+  const GetUserData = () => {
+    const u = sessionStorage.getItem('user')
+    const data = JSON.parse(u)
+    setUser(data)
+  }
+
+  const GetStudentsUserID = async () => {
+    const data = await fetch(`${API.ADDR}/students/${user.sub}}`)
+    const studentsData = await data.json();
+    setStudentID(studentsData)
+    console.log(user.sub)
   }
 
   // Retorna dades del professor
@@ -80,6 +100,8 @@ const InstructorDetail = (props) => {
     GetInstructructorNumCourses()
     GetInstructructorCourses()
     GetComments()
+    // GetUserData()
+    // GetStudentsUserID()
     GetStudentsNumber()
   }, [])
 
@@ -96,11 +118,12 @@ const InstructorDetail = (props) => {
     { to: 'instructor/list', text: 'Instructors' },
   ];
 
+
   // No entra mentres el hook no estigui carregat
   if(!loaded){
     return <div>Loading ...</div>;
   }
-
+  
   return (
     <>
       <HtmlHead title={title} description={description} />
@@ -185,6 +208,7 @@ const InstructorDetail = (props) => {
             {courses.map(c => (
               <InstructorCourseCard
                 key={c.key}
+                Img={DEFAULT_COURSE_AVATAR}
                 title={c.title}
                 price='0'
                 rating='5'
@@ -247,6 +271,7 @@ const InstructorDetail = (props) => {
       </Row>
     </>
   );
+  
 };
 
 export default InstructorDetail;

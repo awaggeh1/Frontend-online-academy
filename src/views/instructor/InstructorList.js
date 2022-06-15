@@ -24,7 +24,6 @@ const InstructorList = (props) => {
     setInstructorCourses(instructorData)
   }
   
-
   useEffect(() => {
     GetInstructors()
     GetInstructructorCourses()

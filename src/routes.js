@@ -11,6 +11,7 @@ const courses = {
   explore: lazy(() => import('views/courses/CoursesExplore')),
   list: lazy(() => import('views/courses/CoursesList')),
   detail: lazy(() => import('views/courses/CoursesDetail')),
+  newcourse: lazy(() => import('views/courses/NewCourse')),
 };
 const instructor = {
   list: lazy(() => import('views/instructor/InstructorList')),
@@ -52,8 +53,9 @@ const routesAndMenuItems = {
       redirect: true,
       to: `${appRoot}/courses/explore`,
       subs: [
+        { path: '/newcourse', label: 'New Course', component: courses.newcourse },
         { path: '/explore', label: 'menu.explore', component: courses.explore },
-        { path: '/list', label: 'menu.list', component: courses.list },
+        { path: '/list', label: 'menu.list', component: courses.list }
       ],
     },
     {
@@ -65,7 +67,7 @@ const routesAndMenuItems = {
       to: `${appRoot}/instructor/list`,
       subs: [
         { path: '/list', label: 'menu.list', component: instructor.list },
-        // { path: '/detail', label: 'menu.detail', component: instructor.detail },
+        //{ path: '/detail', label: 'menu.detail', component: instructor.detail },
       ],
     },
     {
@@ -76,7 +78,12 @@ const routesAndMenuItems = {
       path: `${appRoot}/instructor/detail/:idInstructor`,
       component: instructor.detail
     },
+    {
+      path: `${appRoot}/courses/newcourse`,
+      component: courses.newcourse
+    },
   ],
   sidebarItems: [],
 };
+
 export default routesAndMenuItems;

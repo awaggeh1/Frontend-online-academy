@@ -3,7 +3,8 @@ import BreadcrumbList from 'components/breadcrumb-list/BreadcrumbList';
 import HtmlHead from 'components/html-head/HtmlHead';
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { useAuth0 } from '@auth0/auth0-react';
+import DEFAULT_AVATAR_VIDEO from '../../assets/imatges/video-icon.png';
+import DEFAULT_AVATAR_VIDEO_2 from '../../assets/imatges/video-icon-3.png';
 
 import ContinueLearning from './components/ContinueLearning';
 import RecomendendCourse from './components/RecomendedCourse';
@@ -15,17 +16,14 @@ const ElearningDashboard = () => {
   const [course, setCourse] = useState([]);
   const [recomendedCourse, setRecomendedCourse] = useState([]);
   const [trendingCourse, setTrendingCourse] = useState([]);
-
-  const { user } = useAuth0();
+  const [loaded, setLoaded] = useState(0);
   
-  // Emagatzema les dades del login
-  sessionStorage.setItem('user', JSON.stringify(user))
-
   // Retorna els cursos que el usuari ha de continuar fent
   const GetContinuelearningCourse = async () => {
     const data = await fetch(`${API.ADDR}/courses/2`) // Obte les dades
     const courseData = await data.json(); // els transforma en json
     setCourse(courseData)
+    setLoaded(true)
   }
 
   // Agafa els cursos recomenats 
@@ -42,18 +40,18 @@ const ElearningDashboard = () => {
     setTrendingCourse(courseData)
   }
 
-  useEffect(() => {
+
+  useEffect(() => {  
     GetContinuelearningCourse()
     GetRecomendedCourse()
     GetTrendingCourse()
   }, [])
 
-
   const title = 'E-learning Dashboard';
   const description = 'Elearning Portal E-learning Dashboard Page';
   const breadcrumbs = [{ to: '', text: 'Inicio' }];
 
-  if (!course) {
+  if (!loaded) {
     return <div>Loading...</div>;
   }
 
@@ -80,7 +78,7 @@ const ElearningDashboard = () => {
           <ContinueLearning 
             title={course.title} 
             toCourse= {`/courses/detail/${course.idcourse}`}
-            imgLink='/img/product/small/product-1.webp' 
+            imgLink={DEFAULT_AVATAR_VIDEO}
             progress='69'
           />
         </Col>
@@ -92,7 +90,7 @@ const ElearningDashboard = () => {
           <RecomendendCourse 
             title={recomendedCourse.title} 
             description={recomendedCourse.description} 
-            imgLink='/img/banner/cta-standard-3.webp'
+           // imgLink={DEFAULT_AVATAR_VIDEO}
             rating='4'
             toCourse= {`/courses/detail/${recomendedCourse.idcourse}`}
             />
@@ -106,7 +104,7 @@ const ElearningDashboard = () => {
         <TrendingCourse 
           title={trendingCourse.title} 
           description={trendingCourse.description} 
-          imgLink='/img/product/small/product-4.webp'
+          imgLink={DEFAULT_AVATAR_VIDEO_2}
           rating='5'
           price='0'
           toCourse= {`/courses/detail/${trendingCourse.idcourse}`}

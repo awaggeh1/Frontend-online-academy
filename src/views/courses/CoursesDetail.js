@@ -17,32 +17,9 @@ const CoursesDetail = (props) => {
 
   const description = 'Elearning Portal Course Detail Page';
   const breadcrumbs = [
-    { to: '', text: 'Incio' },
+    { to: 'dashboards/elearning', text: 'Inicio' },
     { to: 'courses/explore', text: 'Cursos' },
   ];
-
-  const userData = JSON.parse(sessionStorage.getItem('user'))
-  console.log(userData.sub)
-
-  
-  // Fa un post d'un nou review a la base de dades
-  // async function PostStudent(){
-  //   fetch(`${API.ADDR}/students`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Accept: 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       idstudent: user.,
-  //       first_name: req.body.first_name,
-  //       last_name: req.body.last_name,
-  //       img_uri: req.body.img_uri,
-  //       instructorIdinstructor: req.body.instructorIdinstructor
-  //     })
-  //   })
-  // }
-
 
   // Declaracio dels estats
   const [course, setCourse] = useState([]);
@@ -50,7 +27,15 @@ const CoursesDetail = (props) => {
   const [loaded, setLoading] = useState(0);
   const [commentText, setCommentText] = useState([]);
   const [rate, setRate] = useState(0);
+  const [user, setUser] = useState([]);
   const [isShown, setIsShown] = useState(false);
+
+  // Recupera les dades d'inici de sessió del usuari 
+  //  const GetUserData = () => {
+  //   const u = sessionStorage.getItem('user')
+  //   const data = JSON.parse(u)
+  //   setUser(data)
+  // }
 
   const GetCourse = async () => {
     const data = await fetch(`${API.ADDR}/courses/${props.match.params.idCourse}`) // Obte les dades del curs especificat
@@ -64,7 +49,7 @@ const CoursesDetail = (props) => {
     const reviewData = await data.json(); // els transforma en json
     setReview(reviewData)
   }
-
+  
   // Fa un post d'un nou review a la base de dades
   async function PostReview(){
     fetch(`${API.ADDR}/reviews`, {
@@ -85,6 +70,7 @@ const CoursesDetail = (props) => {
 
   useEffect(() => {
     GetCourse()
+    // GetUserData()
     GetReview()
   }, [])
 
